@@ -5,6 +5,7 @@ import {
   getBookings,
   getBookingById,
   updateStatus,
+  deleteBooking, // <--- 1. Import delete controller
 } from '../controllers/bookingController.js';
 
 const router = express.Router();
@@ -20,5 +21,5 @@ router.get('/:id', getBookingById);
 
 // PATCH /api/bookings/:id/status - Update reservation status
 router.patch('/:id/status', updateStatus);
-
+router.delete('/:id', deleteBooking);
 export default router;

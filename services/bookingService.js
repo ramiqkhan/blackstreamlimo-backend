@@ -32,7 +32,14 @@ class BookingService {
     if (!booking) throw new Error('Booking not found');
     return booking;
   }
-
+/**
+   * Delete a reservation by ID
+   */
+  async deleteBooking(id) {
+    const booking = await Booking.findByIdAndDelete(id);
+    if (!booking) throw new Error('Booking not found');
+    return booking;
+  }
   /**
    * Update reservation status (e.g. Confirm / Cancel)
    */

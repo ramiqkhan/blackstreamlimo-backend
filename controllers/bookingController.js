@@ -101,3 +101,12 @@ export const updateStatus = async (req, res) => {
     return res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const deleteBooking = async (req, res) => {
+  try {
+    await bookingService.deleteBooking(req.params.id);
+    return res.status(200).json({ success: true, message: 'Booking successfully deleted.' });
+  } catch (error) {
+    return res.status(404).json({ success: false, message: error.message });
+  }
+};
