@@ -5,9 +5,10 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import "./config/cloudinary.js";
 import vehicleRoutes from "./routes/vehicle.routes.js";
-// Change this line:
 import bookingRoutes from './routes/bookingRoutes.js';
+import testimonialRoutes from './routes/testimonial.routes.js'; // Fixed to ES import with .js extension
 import dns from "node:dns/promises";
+
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 dotenv.config();
 
@@ -23,7 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/vehicles", vehicleRoutes);
-app.use("/api/bookings", bookingRoutes); // <-- Register route
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/testimonials", testimonialRoutes); // Registered testimonial route
 
 // Root Route
 app.get("/", (req, res) => {
