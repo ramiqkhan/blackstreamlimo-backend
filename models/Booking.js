@@ -1,0 +1,59 @@
+import mongoose from 'mongoose';
+
+const StopSchema = new mongoose.Schema({
+  address: { type: String, required: true }
+});
+
+const VehicleSchema = new mongoose.Schema({
+  id: { type: String, required: true },
+  name: { type: String, required: true },
+  class: { type: String, required: true },
+  capacity: { type: String, required: true },
+  luggage: { type: String, required: true },
+  price: { type: String, required: true },
+  total: { type: String, required: true },
+  image: { type: String }
+});
+
+const BookingSchema = new mongoose.Schema(
+  {
+    tripType: { 
+      type: String, 
+      enum: ['hourly', 'oneway', 'roundtrip'], 
+      required: true 
+    },
+    duration: { type: String, default: '3 Hours' },
+    orderType: { type: String, required: true },
+    pickupDateTime: { type: Date, required: true },
+    
+    pickupType: { type: String, enum: ['address', 'airport'], default: 'address' },
+    pickupAddress: { type: String, required: true },
+    airline: { type: String },
+    flightNumber: { type: String },
+
+    dropoffType: { type: String, enum: ['address', 'airport'], default: 'address' },
+    dropoffAddress: { type: String },
+
+    stops: [StopSchema],
+    passengerCount: { type: Number, required: true, min: 1 },
+
+    selectedVehicle: { type: VehicleSchema, required: true },
+
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
+    email: { type: String, required: true, trim: true, lowercase: true },
+    optionalEmail: { type: String, trim: true, lowercase: true },
+    phone: { type: String, required: true, trim: true },
+    specialInstructions: { type: String },
+
+    status: { 
+      type: String, 
+      enum: ['Pending', 'Confirmed', 'Cancelled', 'Completed'], 
+      default: 'Pending' 
+    }
+  },
+  { timestamps: true }
+);
+
+const Booking = mongoose.model('Booking', BookingSchema);
+export default Booking;
