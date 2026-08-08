@@ -1,26 +1,19 @@
-import nodemailer from "nodemailer";
+import transporter from '../config/mailer.js';
 
-export const sendEmail = async ({ to, subject, html }) => {
+const sendEmail = async (to, subject, htmlContent) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.HOSTINGER_EMAIL,
-        pass: process.env.HOSTINGER_PASS,
-      },
+    const info = await transporter.sendMail({
+      from: `"Watch Store" <${process.env.EMAIL_USER}>`,
+      to: to,
+      subject: subject,
+      html: htmlContent,
     });
-
-    await transporter.sendMail({
-      from: `"Website Booking" <${process.env.HOSTINGER_EMAIL}>`,
-      to,
-      subject,
-      html,
-    });
-
-    console.log("Email sent successfully");
-  } catch (err) {
-    console.error("Email error:", err.message);
+    console.log("✅ Email sent successfully: %s", info.messageId);
+    return info;
+  } catch (error) {
+    console.error("❌ Email error:", error);
+    throw error;
   }
 };
+
+export default sendEmail;
