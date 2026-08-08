@@ -58,11 +58,11 @@ const BookingSchema = new mongoose.Schema(
 );
 
 // Automatically generate a 6-digit booking ID before saving
-BookingSchema.pre('save', function (next) {
+// Automatically generate a 6-digit booking ID before saving
+BookingSchema.pre('save', function () {
   if (!this.bookingId) {
     this.bookingId = Math.floor(100000 + Math.random() * 900000).toString();
   }
-  next();
 });
 
 const Booking = mongoose.model('Booking', BookingSchema);
