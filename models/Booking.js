@@ -10,13 +10,16 @@ const VehicleSchema = new mongoose.Schema({
   class: { type: String, required: true },
   capacity: { type: String, required: true },
   luggage: { type: String, required: true },
-  price: { type: String, required: true },
   total: { type: String, required: true },
   image: { type: String }
 });
 
 const BookingSchema = new mongoose.Schema(
   {
+    bookingId: { 
+      type: String, 
+      unique: true 
+    },
     tripType: { 
       type: String, 
       enum: ['hourly', 'oneway', 'roundtrip'], 
@@ -54,6 +57,14 @@ const BookingSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Automatically generate a 6-digit booking ID before saving
+BookingSchema.pre('save', function (next) {
+  if (!this.bookingId) {
+    this.bookingId = Math.floor(100000 + Math.random() * 900000).toString();
+  }
+  next();
+});
 
 const Booking = mongoose.model('Booking', BookingSchema);
 export default Booking;

@@ -33,41 +33,44 @@ export const createBooking = async (req, res) => {
     const payload = req.body;
     const newBooking = await bookingService.createBooking(payload);
 
-    // Send the confirmation email with all details and the requested note
+    // Send the confirmation email without pricing details
     try {
       await sendEmail(
         email, 
-        'Booking Confirmation - BlackStream Limo', 
+        `Booking Confirmation - BlackStream Limo (#${newBooking.bookingId})`, 
         `
-        <div style="font-family: Arial, sans-serif; color: #333;">
-          <h2>Thank you for your booking, ${firstName} ${lastName}!</h2>
-          <p>We have successfully received your reservation request. <strong>We will contact you as soon as possible.</strong></p>
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
+          <h2 style="color: #111;">Thank you for your booking, ${firstName} ${lastName}!</h2>
+          <p>We have successfully received your reservation request. Your Booking Reference ID is <strong style="color: #000; font-size: 16px;">#${newBooking.bookingId}</strong>.</p>
+          <p><strong>We will contact you as soon as possible.</strong></p>
           
-          <hr style="border: 0; border-top: 1px solid #eee;" />
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
           
-          <h3>Booking Summary:</h3>
-          <ul>
+          <h3 style="color: #333;">Booking Summary:</h3>
+          <ul style="list-style-type: none; padding: 0; line-height: 1.6;">
+            <li><strong>Booking ID:</strong> #${newBooking.bookingId}</li>
             <li><strong>Trip Type:</strong> ${tripType}</li>
             <li><strong>Pickup Date & Time:</strong> ${new Date(pickupDateTime).toLocaleString()}</li>
             <li><strong>Pickup Address:</strong> ${pickupAddress}</li>
             <li><strong>Dropoff Address:</strong> ${dropoffAddress || 'N/A'}</li>
             <li><strong>Vehicle:</strong> ${selectedVehicle.name} (${selectedVehicle.class})</li>
             <li><strong>Passengers:</strong> ${passengerCount}</li>
-            <li><strong>Total Price:</strong> $${selectedVehicle.total || selectedVehicle.price}</li>
           </ul>
 
           ${specialInstructions ? `<p><strong>Special Instructions:</strong> ${specialInstructions}</p>` : ''}
           
-          <p style="margin-top: 20px;">Best regards,<br/><strong>BlackStream Limo Team</strong></p>
+          <p style="margin-top: 30px;">Best regards,<br/><strong>BlackStream Limo Team</strong></p>
         </div>
         `
       );
     } catch (emailError) {
-console.error("Email failed to send, but booking was saved:", emailError);    }
+      console.error("Email failed to send, but booking was saved:", emailError);
+    }
 
     return res.status(201).json({
       success: true,
       message: 'Reservation request successfully received.',
+      id: newBooking.bookingId,
       data: newBooking
     });
   } catch (error) {
