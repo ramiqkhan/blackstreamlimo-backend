@@ -63,8 +63,7 @@ export const createBooking = async (req, res) => {
         `
       );
     } catch (emailError) {
-      console.error("Email failed to send, but booking was saved:", emailError);
-    }
+console.error("Email failed to send, but booking was saved:", emailError);    }
 
     return res.status(201).json({
       success: true,
