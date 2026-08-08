@@ -10,10 +10,9 @@ const VehicleSchema = new mongoose.Schema({
   class: { type: String, required: true },
   capacity: { type: String, required: true },
   luggage: { type: String, required: true },
-  total: { type: String, required: true },
   image: { type: String }
+  // price and total removed completely
 });
-
 const BookingSchema = new mongoose.Schema(
   {
     bookingId: { 
