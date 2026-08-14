@@ -11,8 +11,15 @@ const vehicleSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["Sedans", "SUVs", "Sprinters"],
-      trim: true,
+enum: [
+        "Luxury SUV – Escalade",
+        "Stretch Limousine",
+        "Limo Sprinter",
+        "Executive Sprinter",
+        "Shuttle Sprinter",
+        "Party Bus"
+      ],
+            trim: true,
     },
     model: {
       type: String,
